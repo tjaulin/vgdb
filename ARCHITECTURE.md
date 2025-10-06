@@ -51,7 +51,11 @@ src/
 │   ├── 📄 GameDetails.tsx          # Vue détaillée jeu
 │   ├── 📄 Navigation.tsx           # Barre navigation (Client)
 │   ├── 📄 RefreshButton.tsx        # Bouton reload (Client)
-│   └── 📄 BackButton.tsx           # Bouton retour (Client)
+│   ├── 📄 BackButton.tsx           # Bouton retour (Client)
+│   └── 📄 ThemeToggle.tsx          # Basculement thème (Client)
+│
+├── 📁 contexts/                     # Contexts React
+│   └── 📄 ThemeContext.tsx         # Gestion état thème global
 │
 └── 📁 lib/                         # Logique métier et services
     └── 📄 igdb.ts                  # Service API IGDB + Types
@@ -145,18 +149,85 @@ if (isNaN(gameId)) {
 
 ## 🎨 Architecture CSS et styling
 
-### **Configuration Tailwind**
+### **Configuration Tailwind avec thème jour/nuit**
 ```typescript
 // tailwind.config.ts
 const config = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  darkMode: 'class', // Activation du mode sombre
   theme: {
     extend: {
-      // Extensions personnalisées
+      colors: {
+        primary: {
+          50: '#fefce8',   // Palette jaune principale
+          500: '#eab308',  // Couleur de base
+          900: '#713f12',  // Couleur foncée
+        },
+        dark: {
+          50: '#f8fafc',   // Palette pour mode sombre
+          800: '#1e293b',  // Arrière-plans foncés
+          900: '#0f172a',  // Arrière-plan principal sombre
+        }
+      },
     },
   },
-  plugins: [], // Plus de plugins externes nécessaires
+  plugins: [],
 };
+```
+
+### **Système de thème avec Context React**
+```typescript
+// src/contexts/ThemeContext.tsx
+'use client';
+export const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState('dark'); // Mode nuit par défaut
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    // Chargement depuis localStorage
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+    document.documentElement.className = savedTheme;
+    setMounted(true);
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.className = newTheme;
+  };
+};
+```
+
+### **Composant de basculement thème**
+```typescript
+// src/components/ThemeToggle.tsx
+'use client';
+export default function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+  
+  return (
+    <button onClick={toggleTheme} aria-label="Toggle theme">
+      {theme === 'light' ? (
+        <MoonIcon />  // Icône lune pour passer en mode sombre
+      ) : (
+        <SunIcon />   // Icône soleil pour passer en mode clair
+      )}
+    </button>
+  );
+}
+```
+
+### **Classes CSS adaptatives**
+```css
+/* Exemple d'utilisation des classes dark: */
+<div className="bg-white dark:bg-dark-800 text-gray-900 dark:text-white">
+  <h1 className="text-primary-500 dark:text-primary-400">Titre</h1>
+  <span className="bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300">
+    Badge
+  </span>
+</div>
 ```
 
 ### **Styles globaux**

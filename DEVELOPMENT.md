@@ -115,28 +115,68 @@ export default function NouvellePage() {
 
 ## 🎨 Guide de design
 
-### **Classes Tailwind couramment utilisées**
+### **Classes Tailwind avec thème jour/nuit**
 ```css
 /* Layout et spacing */
-max-w-7xl mx-auto px-4 sm:px-6 lg:px-8    /* Container principal */
-grid grid-cols-1 md:grid-cols-2 gap-6      /* Grilles responsive */
-flex items-center justify-between           /* Flex alignment */
+max-w-7xl mx-auto px-4 sm:px-6 lg:px-8        /* Container principal */
+grid grid-cols-1 md:grid-cols-2 gap-6          /* Grilles responsive */
+flex items-center justify-between               /* Flex alignment */
 
-/* Couleurs thème VGDb */
-text-gray-900                               /* Texte principal */
-text-gray-600                               /* Texte secondaire */
-bg-blue-600 hover:bg-blue-700              /* Boutons primaires */
-bg-white shadow-lg                          /* Cartes */
+/* Couleurs adaptatives thème VGDb */
+text-gray-900 dark:text-white                  /* Texte principal */
+text-gray-600 dark:text-gray-400               /* Texte secondaire */
+bg-primary-600 hover:bg-primary-700            /* Boutons primaires (jaune) */
+bg-white dark:bg-dark-800                      /* Arrière-plans cartes */
+shadow-lg dark:shadow-dark-900/20              /* Ombres adaptatives */
 
-/* États interactifs */
-hover:shadow-lg transition-shadow duration-300
+/* États interactifs avec thème */
+hover:shadow-lg dark:hover:shadow-dark-900/40 transition-all duration-300
 group-hover:scale-105 transition-transform
-focus:ring-2 focus:ring-blue-500
+focus:ring-2 focus:ring-primary-500
 
-/* Typography */
-text-4xl font-bold                          /* Titres principaux */
-text-xl text-gray-600                       /* Sous-titres */
-text-sm px-2 py-1 rounded                  /* Badges */
+/* Typography avec mode sombre */
+text-4xl font-bold text-gray-900 dark:text-white     /* Titres principaux */
+text-xl text-gray-600 dark:text-gray-300             /* Sous-titres */
+bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300  /* Badges */
+
+/* Palette de couleurs */
+primary-50   /* #fefce8 - jaune très clair */
+primary-500  /* #eab308 - jaune principal */  
+primary-900  /* #713f12 - jaune foncé */
+dark-800     /* #1e293b - arrière-plan sombre */
+dark-900     /* #0f172a - arrière-plan très sombre */
+```
+
+### **Guide d'utilisation du système de thème**
+```typescript
+// 1. Toujours utiliser les classes dark: pour le mode sombre
+<div className="bg-white dark:bg-dark-800 text-gray-900 dark:text-white">
+
+// 2. Préférer les couleurs primary pour les éléments interactifs
+<button className="bg-primary-600 hover:bg-primary-700 text-white">
+
+// 3. Adapter les ombres pour le mode sombre
+<div className="shadow-md dark:shadow-dark-900/20">
+
+// 4. Utiliser les transitions pour les changements fluides
+<div className="bg-white dark:bg-dark-800 transition-colors duration-200">
+
+// 5. Pour les nouveaux composants, toujours tester les deux thèmes
+const MyComponent = () => (
+  <div className="p-4 bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-600">
+    <h2 className="text-gray-900 dark:text-white">Titre</h2>
+    <p className="text-gray-600 dark:text-gray-400">Description</p>
+  </div>
+);
+```
+
+### **Classes Tailwind couramment utilisées (legacy)**
+```css
+/* Ces classes sont remplacées par les versions adaptatives ci-dessus */
+text-gray-900           → text-gray-900 dark:text-white
+bg-blue-600             → bg-primary-600
+hover:bg-blue-700       → hover:bg-primary-700
+bg-white shadow-lg      → bg-white dark:bg-dark-800 shadow-lg dark:shadow-dark-900/20
 ```
 
 ### **Breakpoints responsive**

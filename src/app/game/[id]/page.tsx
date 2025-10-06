@@ -66,12 +66,12 @@ export default async function GamePage({ params }: Props) {
         return (
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="text-center">
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    <div className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-500 text-red-700 dark:text-red-300 px-4 py-3 rounded mb-4">
                         <h2 className="text-xl font-semibold mb-2">Erreur de chargement</h2>
                         <p className="mb-4">{error}</p>
                         <a
                             href="/"
-                            className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors"
+                            className="inline-block bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded transition-colors"
                         >
                             Retour à l&apos;accueil
                         </a>
@@ -88,14 +88,14 @@ export default async function GamePage({ params }: Props) {
     return (
         <div>
             {/* Breadcrumb */}
-            <div className="bg-white shadow-sm">
+            <div className="bg-white dark:bg-dark-800 shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                     <nav className="flex" aria-label="Breadcrumb">
                         <ol className="inline-flex items-center space-x-1 md:space-x-3">
                             <li className="inline-flex items-center">
                                 <a
                                     href="/"
-                                    className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600"
+                                    className="inline-flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400"
                                 >
                                     <svg
                                         className="mr-2 w-4 h-4"
@@ -111,7 +111,7 @@ export default async function GamePage({ params }: Props) {
                             <li>
                                 <div className="flex items-center">
                                     <svg
-                                        className="w-6 h-6 text-gray-400"
+                                        className="w-6 h-6 text-gray-400 dark:text-gray-500"
                                         fill="currentColor"
                                         viewBox="0 0 20 20"
                                         xmlns="http://www.w3.org/2000/svg"
@@ -122,7 +122,7 @@ export default async function GamePage({ params }: Props) {
                                             clipRule="evenodd"
                                         ></path>
                                     </svg>
-                                    <span className="ml-1 text-sm font-medium text-gray-500 md:ml-2 truncate max-w-xs">
+                                    <span className="ml-1 text-sm font-medium text-gray-500 dark:text-gray-400 md:ml-2 truncate max-w-xs">
                                         {game.name}
                                     </span>
                                 </div>

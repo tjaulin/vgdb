@@ -2,7 +2,43 @@
 
 ## 🕐 Historique complet des modifications
 
-### 🎯 Phase 1 : Initialisation du projet (Octobre 2025)
+### � Phase 6 : Système de thème jour/nuit (Novembre 2025)
+
+#### ✅ Implémentation du mode sombre par défaut
+**Nouveaux fichiers créés :**
+- `src/contexts/ThemeContext.tsx` - Context React pour la gestion du thème
+- `src/components/ThemeToggle.tsx` - Composant de basculement de thème
+
+**Modifications apportées :**
+- **Configuration Tailwind CSS** : 
+  - Mode sombre activé (`darkMode: 'class'`)
+  - Palette de couleurs jaune comme couleur principale (remplace le bleu)
+  - Couleurs dark personnalisées (dark-50 à dark-900)
+- **Layout principal (`src/app/layout.tsx`)** :
+  - Intégration du ThemeProvider
+  - Support du mode sombre par défaut
+  - Prévention de l'hydratation flash
+- **Navigation (`src/components/Navigation.tsx`)** :
+  - Ajout du ThemeToggle dans la barre de navigation
+  - Adaptation de toutes les classes CSS pour le mode sombre
+- **Tous les composants adaptés** :
+  - `GameCard.tsx` - Cartes de jeux avec support dark mode
+  - `GameDetails.tsx` - Page détail de jeu avec thème adaptatif
+  - `BackButton.tsx` et `RefreshButton.tsx` - Boutons avec styles dark
+- **Toutes les pages mises à jour** :
+  - Page d'accueil avec hero section adaptative
+  - Page de recherche avec résultats stylés
+  - Page 404 avec design cohérent
+  - Page détail de jeu avec breadcrumb adaptatif
+
+**Palette de couleurs :**
+- **Couleur primaire :** Jaune (#facc15, #eab308, etc.)
+- **Mode sombre :** Dégradé de gris foncé (#f8fafc à #0f172a)
+- **Persistance :** LocalStorage pour mémoriser le choix utilisateur
+
+---
+
+### �🎯 Phase 1 : Initialisation du projet (Octobre 2025)
 
 #### ✅ Création de la structure Next.js
 **Fichiers créés :**
