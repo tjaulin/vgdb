@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Game, getImageUrl } from '@/lib/igdb';
 import GameCard from './GameCard';
 import ImageModal from './ImageModal';
+import RatingDisplay from './RatingDisplay';
 
 interface GameDetailsProps {
     game: Game;
@@ -59,24 +60,13 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
                     <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">{game.name}</h1>
 
                     {(game.rating || game.total_rating) && (
-                        <div className="flex items-center space-x-4 mb-6">
-                            {game.rating && (
-                                <div className="flex items-center">
-                                    <span className="text-2xl font-bold text-primary-500 dark:text-primary-400">
-                                        {Math.round(game.rating)}%
-                                    </span>
-                                    <span className="ml-2 text-gray-600 dark:text-gray-400">Note critique</span>
-                                </div>
-                            )}
-                            {game.total_rating && (
-                                <div className="flex items-center">
-                                    <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
-                                        {Math.round(game.total_rating)}%
-                                    </span>
-                                    <span className="ml-2 text-gray-600 dark:text-gray-400">Note générale</span>
-                                </div>
-                            )}
-                        </div>
+                        <RatingDisplay
+                            rating={game.rating}
+                            ratingCount={game.rating_count}
+                            totalRating={game.total_rating}
+                            totalRatingCount={game.total_rating_count}
+                            className="mb-6"
+                        />
                     )}
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

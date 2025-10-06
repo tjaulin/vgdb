@@ -32,7 +32,9 @@ export interface Game {
         publisher: boolean;
     }>;
     rating?: number;
+    rating_count?: number;
     total_rating?: number;
+    total_rating_count?: number;
     screenshots?: Array<{
         id: number;
         url: string;
@@ -81,7 +83,7 @@ class IGDBService {
 
     async getRandomGames(limit: number = 50): Promise<Game[]> {
         const query = `
-      fields name, summary, cover.url, first_release_date, platforms.name, genres.name, rating, total_rating;
+      fields name, summary, cover.url, first_release_date, platforms.name, genres.name, rating, rating_count, total_rating, total_rating_count;
       where rating != null & cover != null & platforms != null;
       limit ${limit};
       offset ${Math.floor(Math.random() * 1000)};
@@ -98,7 +100,7 @@ class IGDBService {
     async getGameById(id: number): Promise<Game> {
         const query = `
       fields name, summary, cover.url, first_release_date, platforms.name, genres.name, 
-             rating, total_rating, screenshots.url, involved_companies.company.name, 
+             rating, rating_count, total_rating, total_rating_count, screenshots.url, involved_companies.company.name, 
              involved_companies.developer, involved_companies.publisher, similar_games.name, 
              similar_games.cover.url;
       where id = ${id};
@@ -114,7 +116,7 @@ class IGDBService {
 
     async searchGames(query: string, limit: number = 20): Promise<Game[]> {
         const searchQuery = `
-      fields name, summary, cover.url, first_release_date, platforms.name, genres.name, rating, total_rating;
+      fields name, summary, cover.url, first_release_date, platforms.name, genres.name, rating, rating_count, total_rating, total_rating_count;
       search "${query}";
       where rating != null & cover != null;
       limit ${limit};
@@ -129,7 +131,7 @@ class IGDBService {
 
     async getSimilarGames(gameId: number, limit: number = 5): Promise<Game[]> {
         const query = `
-      fields name, summary, cover.url, first_release_date, platforms.name, genres.name, rating, total_rating;
+      fields name, summary, cover.url, first_release_date, platforms.name, genres.name, rating, rating_count, total_rating, total_rating_count;
       where similar_games = [${gameId}] & rating != null & cover != null;
       limit ${limit};
     `;

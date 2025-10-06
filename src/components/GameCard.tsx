@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Game, getImageUrl } from '@/lib/igdb';
+import RatingBadge from './RatingBadge';
 
 interface GameCardProps {
     game: Game;
@@ -29,11 +30,12 @@ export default function GameCard({ game }: GameCardProps) {
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                     />
-                    {game.rating && (
-                        <div className="absolute top-2 right-2 bg-black bg-opacity-75 text-white px-2 py-1 rounded text-sm font-semibold">
-                            {Math.round(game.rating)}%
-                        </div>
-                    )}
+                    <RatingBadge
+                        rating={game.rating}
+                        ratingCount={game.rating_count}
+                        totalRating={game.total_rating}
+                        totalRatingCount={game.total_rating_count}
+                    />
                 </div>
                 <div className="p-4 flex flex-col flex-grow">
                     <h3 className="font-bold text-lg mb-2 line-clamp-2 text-gray-900 dark:text-white group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors min-h-[3.5rem]">
