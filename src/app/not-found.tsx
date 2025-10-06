@@ -8,7 +8,7 @@ export default function NotFound() {
                 <div className="text-9xl font-bold text-gray-300 mb-4">404</div>
                 <h1 className="text-4xl font-bold text-gray-900 mb-4">Jeu non trouvé</h1>
                 <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-                    Désolé, le jeu que vous recherchez n'existe pas ou n'est plus disponible.
+                    Désolé, le jeu que vous recherchez n&apos;existe pas ou n&apos;est plus disponible.
                     Peut-être a-t-il été déplacé vers une autre dimension gaming ?
                 </p>
 

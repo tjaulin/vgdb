@@ -8,7 +8,7 @@ export default function RefreshButton({ count }: RefreshButtonProps) {
     return (
         <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold text-gray-900">
-                Jeux populaires ({count})
+                Jeux aléatoires ({count})
             </h2>
             <button
                 onClick={() => window.location.reload()}
