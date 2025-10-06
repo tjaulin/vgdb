@@ -1,6 +1,10 @@
+'use client';
+
+import { useState } from 'react';
 import Image from 'next/image';
 import { Game, getImageUrl } from '@/lib/igdb';
 import GameCard from './GameCard';
+import ImageModal from './ImageModal';
 
 interface GameDetailsProps {
     game: Game;
@@ -8,6 +12,18 @@ interface GameDetailsProps {
 }
 
 export default function GameDetails({ game, similarGames }: GameDetailsProps) {
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = (imageUrl: string) => {
+        setSelectedImage(imageUrl);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setSelectedImage(null);
+        setIsModalOpen(false);
+    };
     const formatDate = (timestamp?: number) => {
         if (!timestamp) return 'Date inconnue';
         return new Date(timestamp * 1000).toLocaleDateString('fr-FR', {
@@ -145,16 +161,35 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
                         <div className="mb-8">
                             <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Screenshots</h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {game.screenshots.slice(0, 6).map((screenshot) => (
-                                    <div key={screenshot.id} className="relative aspect-video rounded-lg overflow-hidden">
-                                        <Image
-                                            src={getImageUrl(screenshot.url.split('/').pop()!.replace('.jpg', ''), 'screenshot_med')}
-                                            alt="Screenshot"
-                                            fill
-                                            className="object-cover hover:scale-105 transition-transform duration-300 cursor-pointer"
-                                        />
-                                    </div>
-                                ))}
+                                {game.screenshots.slice(0, 6).map((screenshot) => {
+                                    const medImageUrl = getImageUrl(screenshot.url.split('/').pop()!.replace('.jpg', ''), 'screenshot_med');
+                                    const bigImageUrl = getImageUrl(screenshot.url.split('/').pop()!.replace('.jpg', ''), 'screenshot_big');
+
+                                    return (
+                                        <div
+                                            key={screenshot.id}
+                                            className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
+                                            onClick={() => openModal(bigImageUrl)}
+                                        >
+                                            <Image
+                                                src={medImageUrl}
+                                                alt="Screenshot"
+                                                fill
+                                                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                            />
+                                            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+                                                <svg
+                                                    className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                     )}
@@ -172,6 +207,14 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
                     </div>
                 </div>
             )}
+
+            {/* Modal pour l'agrandissement des screenshots */}
+            <ImageModal
+                isOpen={isModalOpen}
+                imageUrl={selectedImage || ''}
+                altText="Screenshot agrandi"
+                onClose={closeModal}
+            />
         </div>
     );
 }
