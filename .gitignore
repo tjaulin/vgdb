@@ -42,6 +42,3 @@ next-env.d.ts
 
 # OS generated files
 Thumbs.db
-
-#copilote
-/.github
