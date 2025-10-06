@@ -88,7 +88,11 @@ class IGDBService {
       sort total_rating desc;
     `;
 
-        return this.makeRequest('games', query);
+        // console.log('🎮 IGDB API - getRandomGames query:', query);
+        const games = await this.makeRequest('games', query);
+        // console.log('🎮 IGDB API - getRandomGames response:', games);
+        // console.log('🎮 IGDB API - Premier jeu exemple:', games[0]);
+        return games;
     }
 
     async getGameById(id: number): Promise<Game> {
@@ -100,7 +104,11 @@ class IGDBService {
       where id = ${id};
     `;
 
+        // console.log('🎮 IGDB API - getGameById query:', query);
         const games = await this.makeRequest('games', query);
+        // console.log('🎮 IGDB API - getGameById response:', games);
+        // console.log('🎮 IGDB API - Jeu trouvé:', games[0]);
+
         return games[0];
     }
 
@@ -112,7 +120,11 @@ class IGDBService {
       limit ${limit};
     `;
 
-        return this.makeRequest('games', searchQuery);
+        // console.log('🔍 IGDB API - searchGames query:', searchQuery);
+        const games = await this.makeRequest('games', searchQuery);
+        // console.log('🔍 IGDB API - searchGames response:', games);
+        // console.log('🔍 IGDB API - Nombre de résultats:', games.length);
+        return games;
     }
 
     async getSimilarGames(gameId: number, limit: number = 5): Promise<Game[]> {
@@ -122,7 +134,11 @@ class IGDBService {
       limit ${limit};
     `;
 
-        return this.makeRequest('games', query);
+        // console.log('🔗 IGDB API - getSimilarGames query:', query);
+        const games = await this.makeRequest('games', query);
+        // console.log('🔗 IGDB API - getSimilarGames response:', games);
+        // console.log('🔗 IGDB API - Jeux similaires trouvés:', games.length);
+        return games;
     }
 }
 
