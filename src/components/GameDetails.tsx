@@ -14,16 +14,34 @@ interface GameDetailsProps {
 
 export default function GameDetails({ game, similarGames }: GameDetailsProps) {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [showAllScreenshots, setShowAllScreenshots] = useState(false);
 
-    const openModal = (imageUrl: string) => {
+    const openModal = (imageUrl: string, index: number) => {
         setSelectedImage(imageUrl);
+        setSelectedImageIndex(index);
         setIsModalOpen(true);
     };
 
     const closeModal = () => {
         setSelectedImage(null);
         setIsModalOpen(false);
+    };
+
+    const navigateImage = (direction: 'prev' | 'next') => {
+        if (!game.screenshots) return;
+
+        let newIndex = selectedImageIndex;
+        if (direction === 'prev') {
+            newIndex = selectedImageIndex > 0 ? selectedImageIndex - 1 : game.screenshots.length - 1;
+        } else {
+            newIndex = selectedImageIndex < game.screenshots.length - 1 ? selectedImageIndex + 1 : 0;
+        }
+
+        setSelectedImageIndex(newIndex);
+        const newImageUrl = getImageUrl(game.screenshots[newIndex].url.split('/').pop()!.replace('.jpg', ''), 'screenshot_big');
+        setSelectedImage(newImageUrl);
     };
     const formatDate = (timestamp?: number) => {
         if (!timestamp) return 'Date inconnue';
@@ -149,9 +167,19 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
 
                     {game.screenshots && game.screenshots.length > 0 && (
                         <div className="mb-8">
-                            <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Screenshots</h3>
+                            <div className="flex justify-between items-center mb-4">
+                                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">Screenshots</h3>
+                                {game.screenshots.length > 6 && (
+                                    <button
+                                        onClick={() => setShowAllScreenshots(!showAllScreenshots)}
+                                        className="px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg text-sm font-medium transition-colors"
+                                    >
+                                        {showAllScreenshots ? 'Afficher moins' : `Afficher plus (${game.screenshots.length})`}
+                                    </button>
+                                )}
+                            </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {game.screenshots.slice(0, 6).map((screenshot) => {
+                                {(showAllScreenshots ? game.screenshots : game.screenshots.slice(0, 6)).map((screenshot, index) => {
                                     const medImageUrl = getImageUrl(screenshot.url.split('/').pop()!.replace('.jpg', ''), 'screenshot_med');
                                     const bigImageUrl = getImageUrl(screenshot.url.split('/').pop()!.replace('.jpg', ''), 'screenshot_big');
 
@@ -159,11 +187,11 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
                                         <div
                                             key={screenshot.id}
                                             className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
-                                            onClick={() => openModal(bigImageUrl)}
+                                            onClick={() => openModal(bigImageUrl, index)}
                                         >
                                             <Image
                                                 src={medImageUrl}
-                                                alt="Screenshot"
+                                                alt={`Screenshot ${index + 1}`}
                                                 fill
                                                 className="object-cover group-hover:scale-105 transition-transform duration-300"
                                             />
@@ -202,8 +230,12 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
             <ImageModal
                 isOpen={isModalOpen}
                 imageUrl={selectedImage || ''}
-                altText="Screenshot agrandi"
+                altText={`Screenshot ${selectedImageIndex + 1}`}
                 onClose={closeModal}
+                onPrevious={game.screenshots && game.screenshots.length > 1 ? () => navigateImage('prev') : undefined}
+                onNext={game.screenshots && game.screenshots.length > 1 ? () => navigateImage('next') : undefined}
+                currentIndex={selectedImageIndex}
+                totalImages={game.screenshots?.length}
             />
         </div>
     );
