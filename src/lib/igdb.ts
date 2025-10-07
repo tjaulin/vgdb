@@ -99,7 +99,8 @@ class IGDBService {
 
     async getRandomGames(limit: number = 50): Promise<Game[]> {
         const query = `
-      fields name, cover.url, first_release_date, rating, rating_count, total_rating, total_rating_count;
+      fields name, cover.url, first_release_date, rating, rating_count, total_rating, total_rating_count,
+             genres.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher;
       where rating != null & cover != null & first_release_date != null;
       limit ${limit};
       offset ${Math.floor(Math.random() * 5000)};
@@ -126,7 +127,8 @@ class IGDBService {
 
     async searchGames(query: string, limit: number = 20): Promise<Game[]> {
         const searchQuery = `
-      fields name, cover.url, first_release_date, rating, rating_count, total_rating, total_rating_count;
+      fields name, cover.url, first_release_date, rating, rating_count, total_rating, total_rating_count, 
+             genres.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher;
       search "${query}";
       where rating != null & cover != null;
       limit ${limit};
@@ -138,7 +140,8 @@ class IGDBService {
 
     async getSimilarGames(gameId: number, limit: number = 5): Promise<Game[]> {
         const query = `
-      fields name, cover.url, first_release_date, rating, rating_count, total_rating, total_rating_count;
+      fields name, cover.url, first_release_date, rating, rating_count, total_rating, total_rating_count,
+             genres.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher;
       where similar_games = [${gameId}] & rating != null & cover != null;
       limit ${limit};
     `;

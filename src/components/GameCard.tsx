@@ -49,23 +49,29 @@ export default function GameCard({ game }: GameCardProps) {
                         {formatDate(game.first_release_date, language === 'fr' ? 'fr-FR' : 'en-US', t.game.unknownDate)}
                     </p>
                     <div className="flex-grow flex flex-col justify-end space-y-2">
-                        {game.platforms && game.platforms.length > 0 && (
-                            <div className="flex flex-wrap gap-1">
-                                {game.platforms.slice(0, 3).map((platform) => (
-                                    <span
-                                        key={platform.id}
-                                        className="inline-block bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 text-xs px-2 py-1 rounded"
-                                    >
-                                        {platform.name}
-                                    </span>
-                                ))}
-                                {game.platforms.length > 3 && (
-                                    <span className="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs px-2 py-1 rounded">
-                                        +{game.platforms.length - 3}
-                                    </span>
-                                )}
-                            </div>
-                        )}
+                        {/* Développeurs */}
+                        {(() => {
+                            const developers = game.involved_companies?.filter(company => company.developer) || [];
+                            return developers.length > 0 ? (
+                                <div className="flex flex-wrap gap-1">
+                                    {developers.slice(0, 2).map((dev) => (
+                                        <span
+                                            key={dev.id}
+                                            className="inline-block bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs px-2 py-1 rounded"
+                                        >
+                                            {dev.company.name}
+                                        </span>
+                                    ))}
+                                    {developers.length > 2 && (
+                                        <span className="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs px-2 py-1 rounded">
+                                            +{developers.length - 2}
+                                        </span>
+                                    )}
+                                </div>
+                            ) : null;
+                        })()}
+
+                        {/* Genres */}
                         {game.genres && game.genres.length > 0 && (
                             <div className="flex flex-wrap gap-1">
                                 {game.genres.slice(0, 2).map((genre) => (
@@ -76,6 +82,11 @@ export default function GameCard({ game }: GameCardProps) {
                                         {genre.name}
                                     </span>
                                 ))}
+                                {game.genres.length > 2 && (
+                                    <span className="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs px-2 py-1 rounded">
+                                        +{game.genres.length - 2}
+                                    </span>
+                                )}
                             </div>
                         )}
                     </div>
