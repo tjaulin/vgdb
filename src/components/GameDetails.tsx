@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Game, getImageUrl } from '@/lib/igdb';
+import { formatDate } from '@/lib/utils';
+import { useImageModal } from '@/hooks';
 import GameCard from './GameCard';
 import ImageModal from './ImageModal';
 import RatingDisplay from './RatingDisplay';
@@ -13,21 +15,8 @@ interface GameDetailsProps {
 }
 
 export default function GameDetails({ game, similarGames }: GameDetailsProps) {
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { selectedImage, selectedImageIndex, isModalOpen, openModal, closeModal, setSelectedImage, setSelectedImageIndex } = useImageModal();
     const [showAllScreenshots, setShowAllScreenshots] = useState(false);
-
-    const openModal = (imageUrl: string, index: number) => {
-        setSelectedImage(imageUrl);
-        setSelectedImageIndex(index);
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setSelectedImage(null);
-        setIsModalOpen(false);
-    };
 
     const navigateImage = (direction: 'prev' | 'next') => {
         if (!game.screenshots) return;
@@ -42,14 +31,6 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
         setSelectedImageIndex(newIndex);
         const newImageUrl = getImageUrl(game.screenshots[newIndex].url.split('/').pop()!.replace('.jpg', ''), 'screenshot_big');
         setSelectedImage(newImageUrl);
-    };
-    const formatDate = (timestamp?: number) => {
-        if (!timestamp) return 'Date inconnue';
-        return new Date(timestamp * 1000).toLocaleDateString('fr-FR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
     };
 
     const coverUrl = game.cover?.url ? getImageUrl(game.cover.url.split('/').pop()!.replace('.jpg', '')) : '/placeholder-game.jpg';
@@ -69,6 +50,7 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
                             fill
                             className="object-cover"
                             priority
+                            sizes="(max-width: 1024px) 100vw, 33vw"
                         />
                     </div>
                 </div>
@@ -194,6 +176,8 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
                                                 alt={`Screenshot ${index + 1}`}
                                                 fill
                                                 className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                                loading="lazy"
                                             />
                                             <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
                                                 <svg

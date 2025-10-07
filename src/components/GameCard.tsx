@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { Game, getImageUrl } from '@/lib/igdb';
+import { formatDate } from '@/lib/utils';
 import RatingBadge from './RatingBadge';
 
 interface GameCardProps {
@@ -12,14 +13,6 @@ interface GameCardProps {
 
 export default function GameCard({ game }: GameCardProps) {
     const [isNavigating, setIsNavigating] = useState(false);
-    const formatDate = (timestamp?: number) => {
-        if (!timestamp) return 'Date inconnue';
-        return new Date(timestamp * 1000).toLocaleDateString('fr-FR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
-    };
 
     const coverUrl = game.cover?.url ? getImageUrl(game.cover.url.split('/').pop()!.replace('.jpg', '')) : '/placeholder-game.jpg';
 

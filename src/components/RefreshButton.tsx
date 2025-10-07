@@ -1,16 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useLoading } from '@/hooks';
 
 interface RefreshButtonProps {
     count: number;
 }
 
 export default function RefreshButton({ count }: RefreshButtonProps) {
-    const [isRefreshing, setIsRefreshing] = useState(false);
+    const { isLoading: isRefreshing, startLoading } = useLoading();
 
     const handleRefresh = async () => {
-        setIsRefreshing(true);
+        startLoading();
         // Petit délai pour montrer le loader
         setTimeout(() => {
             window.location.reload();

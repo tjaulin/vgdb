@@ -39,14 +39,7 @@ export interface Game {
         id: number;
         url: string;
     }>;
-    similar_games?: Array<{
-        id: number;
-        name: string;
-        cover?: {
-            id: number;
-            url: string;
-        };
-    }>;
+
 }
 
 // Fonction pour construire l'URL d'image IGDB
@@ -83,17 +76,14 @@ class IGDBService {
 
     async getRandomGames(limit: number = 50): Promise<Game[]> {
         const query = `
-      fields name, summary, cover.url, first_release_date, platforms.name, genres.name, rating, rating_count, total_rating, total_rating_count;
-      where rating != null & cover != null & platforms != null;
+      fields name, cover.url, first_release_date, rating, rating_count, total_rating, total_rating_count;
+      where rating != null & cover != null & first_release_date != null;
       limit ${limit};
-      offset ${Math.floor(Math.random() * 1000)};
+      offset ${Math.floor(Math.random() * 5000)};
       sort total_rating desc;
     `;
 
-        // console.log('🎮 IGDB API - getRandomGames query:', query);
         const games = await this.makeRequest('games', query);
-        // console.log('🎮 IGDB API - getRandomGames response:', games);
-        // console.log('🎮 IGDB API - Premier jeu exemple:', games[0]);
         return games;
     }
 
@@ -101,45 +91,34 @@ class IGDBService {
         const query = `
       fields name, summary, cover.url, first_release_date, platforms.name, genres.name, 
              rating, rating_count, total_rating, total_rating_count, screenshots.url, involved_companies.company.name, 
-             involved_companies.developer, involved_companies.publisher, similar_games.name, 
-             similar_games.cover.url;
+             involved_companies.developer, involved_companies.publisher;
       where id = ${id};
     `;
 
-        // console.log('🎮 IGDB API - getGameById query:', query);
         const games = await this.makeRequest('games', query);
-        // console.log('🎮 IGDB API - getGameById response:', games);
-        // console.log('🎮 IGDB API - Jeu trouvé:', games[0]);
-
         return games[0];
     }
 
     async searchGames(query: string, limit: number = 20): Promise<Game[]> {
         const searchQuery = `
-      fields name, summary, cover.url, first_release_date, platforms.name, genres.name, rating, rating_count, total_rating, total_rating_count;
+      fields name, cover.url, first_release_date, rating, rating_count, total_rating, total_rating_count;
       search "${query}";
       where rating != null & cover != null;
       limit ${limit};
     `;
 
-        // console.log('🔍 IGDB API - searchGames query:', searchQuery);
         const games = await this.makeRequest('games', searchQuery);
-        // console.log('🔍 IGDB API - searchGames response:', games);
-        // console.log('🔍 IGDB API - Nombre de résultats:', games.length);
         return games;
     }
 
     async getSimilarGames(gameId: number, limit: number = 5): Promise<Game[]> {
         const query = `
-      fields name, summary, cover.url, first_release_date, platforms.name, genres.name, rating, rating_count, total_rating, total_rating_count;
+      fields name, cover.url, first_release_date, rating, rating_count, total_rating, total_rating_count;
       where similar_games = [${gameId}] & rating != null & cover != null;
       limit ${limit};
     `;
 
-        // console.log('🔗 IGDB API - getSimilarGames query:', query);
         const games = await this.makeRequest('games', query);
-        // console.log('🔗 IGDB API - getSimilarGames response:', games);
-        // console.log('🔗 IGDB API - Jeux similaires trouvés:', games.length);
         return games;
     }
 }

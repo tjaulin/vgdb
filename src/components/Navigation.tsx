@@ -2,16 +2,17 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useLoading } from '@/hooks';
 import ThemeToggle from './ThemeToggle';
 
 export default function Navigation() {
     const [searchQuery, setSearchQuery] = useState('');
-    const [isSearching, setIsSearching] = useState(false);
+    const { isLoading: isSearching, startLoading } = useLoading();
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
         if (searchQuery.trim()) {
-            setIsSearching(true);
+            startLoading();
             window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`;
         }
     };
