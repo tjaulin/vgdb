@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { Game, getImageUrl } from '@/lib/igdb';
 import { formatDate } from '@/lib/utils';
+import { useLoading } from '@/hooks';
+import { useLanguage } from '@/contexts/LanguageContext';
 import RatingBadge from './RatingBadge';
 
 interface GameCardProps {
@@ -13,6 +15,7 @@ interface GameCardProps {
 
 export default function GameCard({ game }: GameCardProps) {
     const [isNavigating, setIsNavigating] = useState(false);
+    const { t, language } = useLanguage();
 
     const coverUrl = game.cover?.url ? getImageUrl(game.cover.url.split('/').pop()!.replace('.jpg', '')) : '/placeholder-game.jpg';
 
@@ -43,7 +46,7 @@ export default function GameCard({ game }: GameCardProps) {
                         {game.name}
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 flex-shrink-0">
-                        {formatDate(game.first_release_date)}
+                        {formatDate(game.first_release_date, language === 'fr' ? 'fr-FR' : 'en-US', t.game.unknownDate)}
                     </p>
                     <div className="flex-grow flex flex-col justify-end space-y-2">
                         {game.platforms && game.platforms.length > 0 && (

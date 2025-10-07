@@ -1,6 +1,8 @@
 import { igdbService, Game } from '@/lib/igdb';
 import GameCard from '@/components/GameCard';
 import RefreshButton from '@/components/RefreshButton';
+import HomeHero from '@/components/HomeHero';
+import HomeFeatures from '@/components/HomeFeatures';
 
 export default async function HomePage() {
     let games: Game[] = [];
@@ -36,16 +38,7 @@ export default async function HomePage() {
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="text-center mb-12">
-                <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4">
-                    Découvrez les meilleurs{' '}
-                    <span className="text-primary-500 dark:text-primary-400">jeux vidéos</span>
-                </h1>
-                <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-                    Explorez notre collection de jeux vidéos avec des informations détaillées,
-                    notes, screenshots et bien plus encore.
-                </p>
-            </div>
+            <HomeHero />
 
             {games.length > 0 ? (
                 <>
@@ -64,35 +57,7 @@ export default async function HomePage() {
                 </div>
             )}
 
-            <div className="mt-16 text-center">
-                <div className="bg-white dark:bg-dark-800 rounded-lg shadow-md dark:shadow-dark-900/20 p-8">
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                        Une base de données complète
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300 mb-6">
-                        Alimentée par IGDB, notre plateforme vous donne accès à des milliers de jeux
-                        avec des informations détaillées, des notes de critiques et d&apos;utilisateurs,
-                        des screenshots et des recommandations personnalisées.
-                    </p>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div className="text-center">
-                            <div className="text-3xl mb-2">🎮</div>
-                            <h4 className="font-semibold text-gray-900 dark:text-white">Milliers de jeux</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Découvrez des jeux de toutes les plateformes</p>
-                        </div>
-                        <div className="text-center">
-                            <div className="text-3xl mb-2">⭐</div>
-                            <h4 className="font-semibold text-gray-900 dark:text-white">Notes et critiques</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Consultez les avis des experts et joueurs</p>
-                        </div>
-                        <div className="text-center">
-                            <div className="text-3xl mb-2">🔍</div>
-                            <h4 className="font-semibold text-gray-900 dark:text-white">Recherche avancée</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Trouvez exactement ce que vous cherchez</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <HomeFeatures />
         </div>
     );
 }

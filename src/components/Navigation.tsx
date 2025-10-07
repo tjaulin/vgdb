@@ -3,11 +3,14 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useLoading } from '@/hooks';
+import { useLanguage } from '@/contexts/LanguageContext';
 import ThemeToggle from './ThemeToggle';
+import LanguageSelector from './LanguageSelector';
 
 export default function Navigation() {
     const [searchQuery, setSearchQuery] = useState('');
     const { isLoading: isSearching, startLoading } = useLoading();
+    const { t } = useLanguage();
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
@@ -33,7 +36,7 @@ export default function Navigation() {
                         <form onSubmit={handleSearch} className="relative">
                             <input
                                 type="text"
-                                placeholder="Rechercher un jeu..."
+                                placeholder={t.navigation.search.placeholder}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="w-full pl-10 pr-4 py-2 
@@ -72,8 +75,9 @@ export default function Navigation() {
                             href="/"
                             className="text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
                         >
-                            Accueil
+                            {t.navigation.random}
                         </Link>
+                        <LanguageSelector />
                         <ThemeToggle />
                     </div>
                 </div>

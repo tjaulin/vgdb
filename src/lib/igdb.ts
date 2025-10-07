@@ -39,7 +39,30 @@ export interface Game {
         id: number;
         url: string;
     }>;
+    language_supports?: Array<{
+        id: number;
+        language: Language;
+        language_support_type: LanguageSupportType;
+    }>;
+}
 
+export interface Language {
+    id: number;
+    name: string;
+    native_name: string;
+    locale: string;
+}
+
+export interface LanguageSupportType {
+    id: number;
+    name: string;
+}
+
+export interface LanguageSupport {
+    id: number;
+    game: number;
+    language: Language;
+    language_support_type: LanguageSupportType;
 }
 
 // Fonction pour construire l'URL d'image IGDB
@@ -91,7 +114,9 @@ class IGDBService {
         const query = `
       fields name, summary, cover.url, first_release_date, platforms.name, genres.name, 
              rating, rating_count, total_rating, total_rating_count, screenshots.url, involved_companies.company.name, 
-             involved_companies.developer, involved_companies.publisher;
+             involved_companies.developer, involved_companies.publisher,
+             language_supports.language.name, language_supports.language.native_name, language_supports.language.locale,
+             language_supports.language_support_type.name;
       where id = ${id};
     `;
 
@@ -120,6 +145,38 @@ class IGDBService {
 
         const games = await this.makeRequest('games', query);
         return games;
+    }
+
+    async getLanguages(): Promise<Language[]> {
+        const query = `
+      fields name, native_name, locale;
+      limit 100;
+      sort name asc;
+    `;
+
+        const languages = await this.makeRequest('languages', query);
+        return languages;
+    }
+
+    async getLanguageSupportTypes(): Promise<LanguageSupportType[]> {
+        const query = `
+      fields name;
+      limit 10;
+    `;
+
+        const types = await this.makeRequest('language_support_types', query);
+        return types;
+    }
+
+    async getLanguageSupportsForGame(gameId: number): Promise<LanguageSupport[]> {
+        const query = `
+      fields language.name, language.native_name, language.locale, language_support_type.name;
+      where game = ${gameId};
+      limit 50;
+    `;
+
+        const supports = await this.makeRequest('language_supports', query);
+        return supports;
     }
 }
 

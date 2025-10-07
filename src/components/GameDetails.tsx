@@ -5,9 +5,11 @@ import Image from 'next/image';
 import { Game, getImageUrl } from '@/lib/igdb';
 import { formatDate } from '@/lib/utils';
 import { useImageModal } from '@/hooks';
+import { useLanguage } from '@/contexts/LanguageContext';
 import GameCard from './GameCard';
 import ImageModal from './ImageModal';
 import RatingDisplay from './RatingDisplay';
+import LanguageSupport from './LanguageSupport';
 
 interface GameDetailsProps {
     game: Game;
@@ -17,6 +19,7 @@ interface GameDetailsProps {
 export default function GameDetails({ game, similarGames }: GameDetailsProps) {
     const { selectedImage, selectedImageIndex, isModalOpen, openModal, closeModal, setSelectedImage, setSelectedImageIndex } = useImageModal();
     const [showAllScreenshots, setShowAllScreenshots] = useState(false);
+    const { t, language } = useLanguage();
 
     const navigateImage = (direction: 'prev' | 'next') => {
         if (!game.screenshots) return;
@@ -71,13 +74,13 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                         <div>
-                            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Date de sortie</h3>
-                            <p className="text-gray-600 dark:text-gray-400">{formatDate(game.first_release_date)}</p>
+                            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{t.game.releaseDate}</h3>
+                            <p className="text-gray-600 dark:text-gray-400">{formatDate(game.first_release_date, language === 'fr' ? 'fr-FR' : 'en-US', t.game.unknownDate)}</p>
                         </div>
 
                         {game.platforms && game.platforms.length > 0 && (
                             <div>
-                                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Plateformes</h3>
+                                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{t.game.platforms}</h3>
                                 <div className="flex flex-wrap gap-2">
                                     {game.platforms.map((platform) => (
                                         <span
@@ -93,7 +96,7 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
 
                         {game.genres && game.genres.length > 0 && (
                             <div>
-                                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Genres</h3>
+                                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{t.game.genres}</h3>
                                 <div className="flex flex-wrap gap-2">
                                     {game.genres.map((genre) => (
                                         <span
@@ -109,7 +112,7 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
 
                         {developers && developers.length > 0 && (
                             <div>
-                                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Développeurs</h3>
+                                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{t.game.developers}</h3>
                                 <div className="flex flex-wrap gap-2">
                                     {developers.map((dev) => (
                                         <span
@@ -125,7 +128,7 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
 
                         {publishers && publishers.length > 0 && (
                             <div>
-                                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Éditeurs</h3>
+                                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{t.game.publishers}</h3>
                                 <div className="flex flex-wrap gap-2">
                                     {publishers.map((pub) => (
                                         <span
@@ -140,23 +143,24 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
                         )}
                     </div>
 
-                    {game.summary && (
-                        <div className="mb-8">
-                            <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Description</h3>
-                            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{game.summary}</p>
-                        </div>
-                    )}
+                    {/* Description du jeu */}
+                    <p className="text-gray-900 dark:text-gray-100 text-base leading-relaxed mb-8">
+                        {game.summary}
+                    </p>
+
+                    {/* Langues supportées */}
+                    <LanguageSupport game={game} />
 
                     {game.screenshots && game.screenshots.length > 0 && (
                         <div className="mb-8">
                             <div className="flex justify-between items-center mb-4">
-                                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">Screenshots</h3>
+                                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">{t.game.screenshots}</h3>
                                 {game.screenshots.length > 6 && (
                                     <button
                                         onClick={() => setShowAllScreenshots(!showAllScreenshots)}
                                         className="px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg text-sm font-medium transition-colors"
                                     >
-                                        {showAllScreenshots ? 'Afficher moins' : `Afficher plus (${game.screenshots.length})`}
+                                        {showAllScreenshots ? t.game.showLess : `${t.game.showMore} (${game.screenshots.length})`}
                                     </button>
                                 )}
                             </div>
@@ -201,7 +205,7 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
             {/* Jeux similaires */}
             {similarGames && similarGames.length > 0 && (
                 <div className="mt-16">
-                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Jeux similaires</h2>
+                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">{t.game.similarGames}</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                         {similarGames.map((game) => (
                             <GameCard key={game.id} game={game} />

@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import Navigation from '@/components/Navigation';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { LanguageProvider } from '@/contexts/LanguageContext';
+import MetadataUpdater from '@/components/MetadataUpdater';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,10 +23,13 @@ export default function RootLayout({
     return (
         <html lang="fr" suppressHydrationWarning>
             <body className={`${inter.className} bg-gray-50 dark:bg-dark-900 min-h-screen transition-colors duration-200`}>
-                <ThemeProvider>
-                    <Navigation />
-                    <main>{children}</main>
-                </ThemeProvider>
+                <LanguageProvider>
+                    <ThemeProvider>
+                        <MetadataUpdater />
+                        <Navigation />
+                        <main>{children}</main>
+                    </ThemeProvider>
+                </LanguageProvider>
             </body>
         </html>
     );
