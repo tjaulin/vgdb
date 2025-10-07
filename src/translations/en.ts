@@ -13,7 +13,8 @@ export const en: Translations = {
         hero: {
             title: "Discover the best video games",
             subtitle: "",
-            description: "Explore our collection of video games with detailed information, ratings, screenshots and much more."
+            description: "Explore our collection of video games with detailed information, ratings, screenshots and much more.",
+            exploreButton: "Explore"
         },
         features: {
             title: "Why choose VGDb?",
@@ -29,6 +30,25 @@ export const en: Translations = {
                 title: "Personalized Experience",
                 description: "Discover new games through our intelligent recommendation system with screenshots and personalized recommendations."
             }
+        }
+    },
+
+    explore: {
+        title: "Explore Games",
+        description: "Discover your next favorite game with our advanced filters",
+        loading: "Loading games...",
+        loadingMore: "Loading...",
+        loadMore: "Load more games",
+        resultsCount: "{count} games found",
+        noMoreResults: "You've seen all available games",
+        filters: {
+            title: "Filters",
+            genres: "Genres",
+            platforms: "Platforms",
+            yearRange: "Release year",
+            ratingRange: "Rating range",
+            applyFilters: "Apply filters",
+            clearFilters: "Clear filters"
         }
     },
 

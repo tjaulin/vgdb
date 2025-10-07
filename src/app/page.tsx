@@ -9,7 +9,7 @@ export default async function HomePage() {
     let error: string | null = null;
 
     try {
-        games = await igdbService.getRandomGames(50);
+        games = await igdbService.getRecentGames(50, 0);
     } catch (err) {
         error = err instanceof Error ? err.message : 'Une erreur est survenue lors du chargement des jeux';
     }

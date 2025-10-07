@@ -13,7 +13,8 @@ export const fr: Translations = {
         hero: {
             title: "Découvrez les meilleurs jeux vidéos",
             subtitle: "",
-            description: "Explorez notre collection de jeux vidéos avec des informations détaillées, notes, screenshots et bien plus encore."
+            description: "Explorez notre collection de jeux vidéos avec des informations détaillées, notes, screenshots et bien plus encore.",
+            exploreButton: "Explorer"
         },
         features: {
             title: "Pourquoi choisir VGDb ?",
@@ -29,6 +30,25 @@ export const fr: Translations = {
                 title: "Expérience personnalisée",
                 description: "Découvrez de nouveaux jeux grâce à notre système de recommandation intelligent avec des screenshots et des recommandations personnalisées."
             }
+        }
+    },
+
+    explore: {
+        title: "Explorer les jeux",
+        description: "Découvrez votre prochain jeu favori grâce à nos filtres avancés",
+        loading: "Chargement des jeux...",
+        loadingMore: "Chargement...",
+        loadMore: "Charger plus de jeux",
+        resultsCount: "{count} jeux trouvés",
+        noMoreResults: "Vous avez vu tous les jeux disponibles",
+        filters: {
+            title: "Filtres",
+            genres: "Genres",
+            platforms: "Plateformes",
+            yearRange: "Année de sortie",
+            ratingRange: "Plage de notes",
+            applyFilters: "Appliquer les filtres",
+            clearFilters: "Réinitialiser"
         }
     },
 

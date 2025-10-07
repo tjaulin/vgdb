@@ -14,6 +14,7 @@ export interface Translations {
             title: string;
             subtitle: string;
             description: string;
+            exploreButton: string;
         };
         features: {
             title: string;
@@ -29,6 +30,26 @@ export interface Translations {
                 title: string;
                 description: string;
             };
+        };
+    };
+
+    // Explore page
+    explore: {
+        title: string;
+        description: string;
+        loading: string;
+        loadingMore: string;
+        loadMore: string;
+        resultsCount: string;
+        noMoreResults: string;
+        filters: {
+            title: string;
+            genres: string;
+            platforms: string;
+            yearRange: string;
+            ratingRange: string;
+            applyFilters: string;
+            clearFilters: string;
         };
     };
 
