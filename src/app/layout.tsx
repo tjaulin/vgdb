@@ -10,6 +10,7 @@ export const metadata: Metadata = {
     title: 'Video Games Database - Découvrez les meilleurs jeux vidéos',
     description: 'Explorez notre base de données complète de jeux vidéos avec des informations détaillées, notes, screenshots et plus encore.',
     keywords: 'jeux vidéo, gaming, database, IGDB, reviews, games',
+
 };
 
 export default function RootLayout({
