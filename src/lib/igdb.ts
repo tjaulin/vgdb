@@ -97,8 +97,10 @@ class IGDBService {
         if (!response.ok) {
             throw new Error(`IGDB API error: ${response.status} ${response.statusText}`);
         }
+        const data = await response.json();
+        console.log(data);
 
-        return response.json();
+        return data;
     }
 
     async getRecentGames(limit: number = 50, offset: number = 0): Promise<Game[]> {

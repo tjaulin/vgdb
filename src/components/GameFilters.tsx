@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { IGDB_GENRES, IGDB_PLATFORMS } from '@/data/igdb-data';
+import MultiSelect from './MultiSelect';
 
 interface FilterOptions {
     genres: string[];
@@ -27,20 +28,12 @@ export default function GameFilters({ filters, onFiltersChange, onApplyFilters }
 
     const currentYear = new Date().getFullYear();
 
-    const handleGenreToggle = (genre: string) => {
-        const newGenres = localFilters.genres.includes(genre)
-            ? localFilters.genres.filter(g => g !== genre)
-            : [...localFilters.genres, genre];
-
-        setLocalFilters(prev => ({ ...prev, genres: newGenres }));
+    const handleGenresChange = (genres: string[]) => {
+        setLocalFilters(prev => ({ ...prev, genres }));
     };
 
-    const handlePlatformToggle = (platform: string) => {
-        const newPlatforms = localFilters.platforms.includes(platform)
-            ? localFilters.platforms.filter(p => p !== platform)
-            : [...localFilters.platforms, platform];
-
-        setLocalFilters(prev => ({ ...prev, platforms: newPlatforms }));
+    const handlePlatformsChange = (platforms: string[]) => {
+        setLocalFilters(prev => ({ ...prev, platforms }));
     };
 
     const handleYearRangeChange = (index: number, value: number) => {
@@ -86,21 +79,13 @@ export default function GameFilters({ filters, onFiltersChange, onApplyFilters }
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
                     {t.explore.filters.genres}
                 </h3>
-                <div className="space-y-2 max-h-48 overflow-y-auto custom-scrollbar">
-                    {AVAILABLE_GENRES.map((genre) => (
-                        <label key={genre.id} className="flex items-center">
-                            <input
-                                type="checkbox"
-                                checked={localFilters.genres.includes(genre.name)}
-                                onChange={() => handleGenreToggle(genre.name)}
-                                className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
-                            />
-                            <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                                {genre.name}
-                            </span>
-                        </label>
-                    ))}
-                </div>
+                <MultiSelect
+                    options={AVAILABLE_GENRES}
+                    selectedValues={localFilters.genres}
+                    onSelectionChange={handleGenresChange}
+                    placeholder="Sélectionner des genres..."
+                    searchPlaceholder="Rechercher un genre..."
+                />
             </div>
 
             {/* Platforms */}
@@ -108,21 +93,13 @@ export default function GameFilters({ filters, onFiltersChange, onApplyFilters }
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
                     {t.explore.filters.platforms}
                 </h3>
-                <div className="space-y-2 max-h-48 overflow-y-auto custom-scrollbar">
-                    {AVAILABLE_PLATFORMS.map((platform) => (
-                        <label key={platform.id} className="flex items-center">
-                            <input
-                                type="checkbox"
-                                checked={localFilters.platforms.includes(platform.name)}
-                                onChange={() => handlePlatformToggle(platform.name)}
-                                className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
-                            />
-                            <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                                {platform.name}
-                            </span>
-                        </label>
-                    ))}
-                </div>
+                <MultiSelect
+                    options={AVAILABLE_PLATFORMS}
+                    selectedValues={localFilters.platforms}
+                    onSelectionChange={handlePlatformsChange}
+                    placeholder="Sélectionner des plateformes..."
+                    searchPlaceholder="Rechercher une plateforme..."
+                />
             </div>
 
             {/* Year Range */}
