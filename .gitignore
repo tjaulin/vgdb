@@ -40,5 +40,8 @@ next-env.d.ts
 *.swp
 *.swo
 
+# Scripts
+/scripts/
+
 # OS generated files
 Thumbs.db
