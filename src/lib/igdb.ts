@@ -1,3 +1,5 @@
+import { GENRE_MAP, PLATFORM_MAP } from '@/data/igdb-data';
+
 // Configuration pour l'API IGDB
 export const IGDB_CONFIG = {
     baseUrl: 'https://api.igdb.com/v4',
@@ -134,77 +136,13 @@ class IGDBService {
 
         // Filtres par genre (utilisation d'IDs pour plus de précision)
         if (genres.length > 0) {
-            // Mapping des genres vers leurs IDs IGDB (noms exacts de l'API)
-            const genreMap: { [key: string]: number } = {
-                'Adventure': 31,
-                'Arcade': 33,
-                'Card & Board Game': 35,
-                'Fighting': 4,
-                'Hack and slash/Beat \'em up': 25,
-                'Indie': 32,
-                'MOBA': 36,
-                'Music': 7,
-                'Pinball': 30,
-                'Platform': 8,
-                'Point-and-click': 2,
-                'Puzzle': 9,
-                'Quiz/Trivia': 26,
-                'Racing': 10,
-                'Real Time Strategy (RTS)': 11,
-                'Role-playing (RPG)': 12,
-                'Shooter': 5,
-                'Simulator': 13,
-                'Sport': 14,
-                'Strategy': 15,
-                'Tactical': 24,
-                'Turn-based strategy (TBS)': 16,
-                'Visual Novel': 34,
-            };
-
-            const genreIds = genres.map(genre => genreMap[genre]).filter(id => id !== undefined);
+            const genreIds = genres.map(genre => GENRE_MAP[genre]).filter(id => id !== undefined);
             if (genreIds.length > 0) {
                 whereConditions.push(`genres = [${genreIds.join(',')}]`);
             }
         }        // Filtres par plateforme (utilisation d'IDs pour plus de précision)
         if (platforms.length > 0) {
-            // Mapping des plateformes vers leurs IDs IGDB (noms exacts de l'API)
-            const platformMap: { [key: string]: number } = {
-                'Amiga': 16,
-                'Amstrad CPC': 25,
-                'Commodore C64/128/MAX': 15,
-                'Dreamcast': 23,
-                'Family Computer Disk System': 51,
-                'Game Boy': 33,
-                'Game Boy Advance': 24,
-                'Game Boy Color': 22,
-                'MSX': 27,
-                'N-Gage': 42,
-                'Nintendo 3DS': 37,
-                'Nintendo 64': 4,
-                'Nintendo DS': 20,
-                'Nintendo Entertainment System': 18,
-                'Nintendo GameCube': 21,
-                'PlayStation': 7,
-                'PlayStation 2': 8,
-                'PlayStation 3': 9,
-                'PlayStation 4': 48,
-                'PlayStation Portable': 38,
-                'PlayStation Vita': 46,
-                'Sega 32X': 30,
-                'Sega Game Gear': 35,
-                'Sega Mega Drive/Genesis': 29,
-                'Sega Saturn': 32,
-                'Super Nintendo Entertainment System': 19,
-                'Tapwave Zodiac': 44,
-                'Wii': 5,
-                'Wii U': 41,
-                'Xbox': 11,
-                'Xbox 360': 12,
-                'Xbox One': 49,
-                'ZX Spectrum': 26,
-            };
-
-            const platformIds = platforms.map(platform => platformMap[platform]).filter(id => id !== undefined);
+            const platformIds = platforms.map(platform => PLATFORM_MAP[platform]).filter(id => id !== undefined);
             if (platformIds.length > 0) {
                 whereConditions.push(`platforms = [${platformIds.join(',')}]`);
             }

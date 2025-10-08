@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { IGDB_GENRES, IGDB_PLATFORMS } from '@/data/igdb-data';
 
 interface FilterOptions {
     genres: string[];
@@ -16,68 +17,9 @@ interface GameFiltersProps {
     onApplyFilters: (filters: FilterOptions) => void;
 }
 
-// Données réelles récupérées depuis l'API IGDB
-const AVAILABLE_GENRES = [
-    { id: 31, name: 'Adventure' },
-    { id: 33, name: 'Arcade' },
-    { id: 35, name: 'Card & Board Game' },
-    { id: 4, name: 'Fighting' },
-    { id: 25, name: 'Hack and slash/Beat \'em up' },
-    { id: 32, name: 'Indie' },
-    { id: 36, name: 'MOBA' },
-    { id: 7, name: 'Music' },
-    { id: 30, name: 'Pinball' },
-    { id: 8, name: 'Platform' },
-    { id: 2, name: 'Point-and-click' },
-    { id: 9, name: 'Puzzle' },
-    { id: 26, name: 'Quiz/Trivia' },
-    { id: 10, name: 'Racing' },
-    { id: 11, name: 'Real Time Strategy (RTS)' },
-    { id: 12, name: 'Role-playing (RPG)' },
-    { id: 5, name: 'Shooter' },
-    { id: 13, name: 'Simulator' },
-    { id: 14, name: 'Sport' },
-    { id: 15, name: 'Strategy' },
-    { id: 24, name: 'Tactical' },
-    { id: 16, name: 'Turn-based strategy (TBS)' },
-    { id: 34, name: 'Visual Novel' },
-];
-
-const AVAILABLE_PLATFORMS = [
-    { id: 16, name: 'Amiga' },
-    { id: 25, name: 'Amstrad CPC' },
-    { id: 15, name: 'Commodore C64/128/MAX' },
-    { id: 23, name: 'Dreamcast' },
-    { id: 51, name: 'Family Computer Disk System' },
-    { id: 33, name: 'Game Boy' },
-    { id: 24, name: 'Game Boy Advance' },
-    { id: 22, name: 'Game Boy Color' },
-    { id: 27, name: 'MSX' },
-    { id: 42, name: 'N-Gage' },
-    { id: 37, name: 'Nintendo 3DS' },
-    { id: 4, name: 'Nintendo 64' },
-    { id: 20, name: 'Nintendo DS' },
-    { id: 18, name: 'Nintendo Entertainment System' },
-    { id: 21, name: 'Nintendo GameCube' },
-    { id: 7, name: 'PlayStation' },
-    { id: 8, name: 'PlayStation 2' },
-    { id: 9, name: 'PlayStation 3' },
-    { id: 48, name: 'PlayStation 4' },
-    { id: 38, name: 'PlayStation Portable' },
-    { id: 46, name: 'PlayStation Vita' },
-    { id: 30, name: 'Sega 32X' },
-    { id: 35, name: 'Sega Game Gear' },
-    { id: 29, name: 'Sega Mega Drive/Genesis' },
-    { id: 32, name: 'Sega Saturn' },
-    { id: 19, name: 'Super Nintendo Entertainment System' },
-    { id: 44, name: 'Tapwave Zodiac' },
-    { id: 5, name: 'Wii' },
-    { id: 41, name: 'Wii U' },
-    { id: 11, name: 'Xbox' },
-    { id: 12, name: 'Xbox 360' },
-    { id: 49, name: 'Xbox One' },
-    { id: 26, name: 'ZX Spectrum' },
-];
+// Utilisation des données centralisées IGDB
+const AVAILABLE_GENRES = IGDB_GENRES;
+const AVAILABLE_PLATFORMS = IGDB_PLATFORMS;
 
 export default function GameFilters({ filters, onFiltersChange, onApplyFilters }: GameFiltersProps) {
     const { t } = useLanguage();
