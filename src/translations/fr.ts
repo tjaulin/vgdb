@@ -68,7 +68,7 @@ export const fr: Translations = {
         voiceActing: "Doublage",
         subtitles: "Sous-titres",
         interface: "Interface",
-        randomGames: "Jeux aléatoires",
+        randomGames: "Jeux récents",
         refreshing: "Actualisation...",
         refresh: "Actualiser",
         loadingError: "Erreur de chargement",
