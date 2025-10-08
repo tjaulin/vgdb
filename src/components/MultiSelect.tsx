@@ -149,22 +149,23 @@ export default function MultiSelect({
                     {/* Options List */}
                     <div className="max-h-60 overflow-y-auto custom-scrollbar">
                         {filteredOptions.length > 0 ? (
-                            filteredOptions.map((option) => (
-                                <label
-                                    key={option.id}
-                                    className="flex items-center px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
-                                >
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedValues.includes(option.name)}
-                                        onChange={() => handleToggleOption(option.name)}
-                                        className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
-                                    />
-                                    <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                                        {option.name}
-                                    </span>
-                                </label>
-                            ))
+                            filteredOptions.map((option) => {
+                                const isSelected = selectedValues.includes(option.name);
+                                return (
+                                    <div
+                                        key={option.id}
+                                        onClick={() => handleToggleOption(option.name)}
+                                        className={`px-3 py-2 cursor-pointer transition-colors duration-200 ${isSelected
+                                                ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 border-l-4 border-yellow-500'
+                                                : 'hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300'
+                                            }`}
+                                    >
+                                        <span className="text-sm font-medium">
+                                            {option.name}
+                                        </span>
+                                    </div>
+                                );
+                            })
                         ) : (
                             <div className="px-3 py-4 text-sm text-gray-500 dark:text-gray-400 text-center">
                                 Aucun résultat trouvé
