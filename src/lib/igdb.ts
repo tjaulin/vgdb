@@ -264,11 +264,11 @@ class IGDBService {
     async getPopularGames(limit: number = 50): Promise<Array<Game & { popularity_value: number }>> {
         // Étape 1: Récupérer les game_id et scores de popularité
         const popularityQuery = `
-      fields game_id, value;
-      sort value desc;
-      limit ${limit};
-      where popularity_type = 5;
-    `;
+            fields game_id, value;
+            sort value desc;
+            limit ${limit};
+            where popularity_type = 5;
+        `;
 
         const popularityData = await this.makeRequest('popularity_primitives', popularityQuery);
 
