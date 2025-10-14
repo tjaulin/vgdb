@@ -19,6 +19,9 @@ interface GameDetailsProps {
 export default function GameDetails({ game, similarGames }: GameDetailsProps) {
     const { selectedImage, selectedImageIndex, isModalOpen, openModal, closeModal, setSelectedImage, setSelectedImageIndex } = useImageModal();
     const [showAllScreenshots, setShowAllScreenshots] = useState(false);
+    const [coverImageSrc, setCoverImageSrc] = useState(
+        game.cover?.url ? getImageUrl(game.cover.url.split('/').pop()!.replace('.jpg', '')) : '/placeholder-game.svg'
+    );
     const { t, language } = useLanguage();
 
     const navigateImage = (direction: 'prev' | 'next') => {
@@ -36,31 +39,34 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
         setSelectedImage(newImageUrl);
     };
 
-    const coverUrl = game.cover?.url ? getImageUrl(game.cover.url.split('/').pop()!.replace('.jpg', '')) : '/placeholder-game.jpg';
+    const handleCoverImageError = () => {
+        setCoverImageSrc('/placeholder-game.svg');
+    };
 
     const developers = game.involved_companies?.filter(company => company.developer);
     const publishers = game.involved_companies?.filter(company => company.publisher);
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
                 {/* Image de couverture */}
                 <div className="lg:col-span-1">
                     <div className="relative aspect-[3/4] rounded-lg overflow-hidden shadow-lg">
                         <Image
-                            src={coverUrl}
+                            src={coverImageSrc}
                             alt={game.name}
                             fill
                             className="object-cover"
                             priority
                             sizes="(max-width: 1024px) 100vw, 33vw"
+                            onError={handleCoverImageError}
                         />
                     </div>
                 </div>
 
                 {/* Informations du jeu */}
                 <div className="lg:col-span-2">
-                    <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">{game.name}</h1>
+                    <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-white">{game.name}</h1>
 
                     {(game.rating || game.total_rating) && (
                         <RatingDisplay
@@ -72,20 +78,20 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
                         />
                     )}
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div className="grid grid-cols-1 gap-6 mb-8 md:grid-cols-2">
                         <div>
-                            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{t.game.releaseDate}</h3>
+                            <h3 className="mb-2 font-semibold text-gray-900 dark:text-white">{t.game.releaseDate}</h3>
                             <p className="text-gray-600 dark:text-gray-400">{formatDate(game.first_release_date, language === 'fr' ? 'fr-FR' : 'en-US', t.game.unknownDate)}</p>
                         </div>
 
                         {game.platforms && game.platforms.length > 0 && (
                             <div>
-                                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{t.game.platforms}</h3>
+                                <h3 className="mb-2 font-semibold text-gray-900 dark:text-white">{t.game.platforms}</h3>
                                 <div className="flex flex-wrap gap-2">
                                     {game.platforms.map((platform) => (
                                         <span
                                             key={platform.id}
-                                            className="inline-block bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 text-sm px-3 py-1 rounded-full"
+                                            className="inline-block px-3 py-1 text-sm rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300"
                                         >
                                             {platform.name}
                                         </span>
@@ -96,12 +102,12 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
 
                         {game.genres && game.genres.length > 0 && (
                             <div>
-                                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{t.game.genres}</h3>
+                                <h3 className="mb-2 font-semibold text-gray-900 dark:text-white">{t.game.genres}</h3>
                                 <div className="flex flex-wrap gap-2">
                                     {game.genres.map((genre) => (
                                         <span
                                             key={genre.id}
-                                            className="inline-block bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 text-sm px-3 py-1 rounded-full"
+                                            className="inline-block px-3 py-1 text-sm rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300"
                                         >
                                             {genre.name}
                                         </span>
@@ -112,12 +118,12 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
 
                         {game.themes && game.themes.length > 0 && (
                             <div>
-                                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{t.game.themes}</h3>
+                                <h3 className="mb-2 font-semibold text-gray-900 dark:text-white">{t.game.themes}</h3>
                                 <div className="flex flex-wrap gap-2">
                                     {game.themes.map((theme) => (
                                         <span
                                             key={theme.id}
-                                            className="inline-block bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 text-sm px-3 py-1 rounded-full"
+                                            className="inline-block px-3 py-1 text-sm text-red-800 bg-red-100 rounded-full dark:bg-red-900/30 dark:text-red-300"
                                         >
                                             {theme.name}
                                         </span>
@@ -128,12 +134,12 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
 
                         {developers && developers.length > 0 && (
                             <div>
-                                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{t.game.developers}</h3>
+                                <h3 className="mb-2 font-semibold text-gray-900 dark:text-white">{t.game.developers}</h3>
                                 <div className="flex flex-wrap gap-2">
                                     {developers.map((dev) => (
                                         <span
                                             key={dev.id}
-                                            className="inline-block bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-sm px-3 py-1 rounded-full"
+                                            className="inline-block px-3 py-1 text-sm text-purple-800 bg-purple-100 rounded-full dark:bg-purple-900/30 dark:text-purple-300"
                                         >
                                             {dev.company.name}
                                         </span>
@@ -144,12 +150,12 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
 
                         {publishers && publishers.length > 0 && (
                             <div>
-                                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{t.game.publishers}</h3>
+                                <h3 className="mb-2 font-semibold text-gray-900 dark:text-white">{t.game.publishers}</h3>
                                 <div className="flex flex-wrap gap-2">
                                     {publishers.map((pub) => (
                                         <span
                                             key={pub.id}
-                                            className="inline-block bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 text-sm px-3 py-1 rounded-full"
+                                            className="inline-block px-3 py-1 text-sm text-orange-800 bg-orange-100 rounded-full dark:bg-orange-900/30 dark:text-orange-300"
                                         >
                                             {pub.company.name}
                                         </span>
@@ -160,7 +166,7 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
                     </div>
 
                     {/* Description du jeu */}
-                    <p className="text-gray-900 dark:text-gray-100 text-base leading-relaxed mb-8">
+                    <p className="mb-8 text-base leading-relaxed text-gray-900 dark:text-gray-100">
                         {game.summary}
                     </p>
 
@@ -169,18 +175,18 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
 
                     {game.screenshots && game.screenshots.length > 0 && (
                         <div className="mb-8">
-                            <div className="flex justify-between items-center mb-4">
+                            <div className="flex items-center justify-between mb-4">
                                 <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">{t.game.screenshots}</h3>
                                 {game.screenshots.length > 6 && (
                                     <button
                                         onClick={() => setShowAllScreenshots(!showAllScreenshots)}
-                                        className="px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg text-sm font-medium transition-colors"
+                                        className="px-4 py-2 text-sm font-medium text-white transition-colors rounded-lg bg-primary-500 hover:bg-primary-600"
                                     >
                                         {showAllScreenshots ? t.game.showLess : `${t.game.showMore} (${game.screenshots.length})`}
                                     </button>
                                 )}
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                                 {(showAllScreenshots ? game.screenshots : game.screenshots.slice(0, 6)).map((screenshot, index) => {
                                     const medImageUrl = getImageUrl(screenshot.url.split('/').pop()!.replace('.jpg', ''), 'screenshot_med');
                                     const bigImageUrl = getImageUrl(screenshot.url.split('/').pop()!.replace('.jpg', ''), 'screenshot_big');
@@ -188,20 +194,20 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
                                     return (
                                         <div
                                             key={screenshot.id}
-                                            className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
+                                            className="relative overflow-hidden rounded-lg cursor-pointer aspect-video group"
                                             onClick={() => openModal(bigImageUrl, index)}
                                         >
                                             <Image
                                                 src={medImageUrl}
                                                 alt={`Screenshot ${index + 1}`}
                                                 fill
-                                                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                                className="object-cover transition-transform duration-300 group-hover:scale-105"
                                                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                                 loading="lazy"
                                             />
-                                            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+                                            <div className="absolute inset-0 flex items-center justify-center transition-all duration-300 bg-black bg-opacity-0 group-hover:bg-opacity-20">
                                                 <svg
-                                                    className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                                    className="w-8 h-8 text-white transition-opacity duration-300 opacity-0 group-hover:opacity-100"
                                                     fill="none"
                                                     stroke="currentColor"
                                                     viewBox="0 0 24 24"
@@ -221,8 +227,8 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
             {/* Jeux similaires */}
             {similarGames && similarGames.length > 0 && (
                 <div className="mt-16">
-                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">{t.game.similarGames}</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                    <h2 className="mb-8 text-3xl font-bold text-gray-900 dark:text-white">{t.game.similarGames}</h2>
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                         {similarGames.map((game) => (
                             <GameCard key={game.id} game={game} />
                         ))}
