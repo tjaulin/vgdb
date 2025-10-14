@@ -260,6 +260,48 @@ class IGDBService {
         const supports = await this.makeRequest('language_supports', query);
         return supports;
     }
+
+    async getPopularGames(limit: number = 50): Promise<Array<Game & { popularity_value: number }>> {
+        // Étape 1: Récupérer les game_id et scores de popularité
+        const popularityQuery = `
+      fields game_id, value;
+      sort value desc;
+      limit ${limit};
+      where popularity_type = 5;
+    `;
+
+        const popularityData = await this.makeRequest('popularity_primitives', popularityQuery);
+
+        if (!popularityData || popularityData.length === 0) {
+            return [];
+        }
+
+        // Extraire les game_id
+        const gameIds = popularityData.map((item: any) => item.game_id);
+
+        // Étape 2: Récupérer les détails des jeux
+        const gamesQuery = `
+      fields name, cover.url, genres.name, themes.name, first_release_date, summary, rating, rating_count, total_rating, total_rating_count;
+      where id = (${gameIds.join(',')});
+      limit ${limit};
+    `;
+
+        const games = await this.makeRequest('games', gamesQuery);
+
+        // Étape 3: Joindre les données de popularité avec les jeux
+        const gamesWithPopularity = games.map((game: Game) => {
+            const popularityItem = popularityData.find((item: any) => item.game_id === game.id);
+            return {
+                ...game,
+                popularity_value: popularityItem?.value || 0
+            };
+        });
+
+        // Trier par valeur de popularité décroissante
+        gamesWithPopularity.sort((a: Game & { popularity_value: number }, b: Game & { popularity_value: number }) => b.popularity_value - a.popularity_value);
+
+        return gamesWithPopularity;
+    }
 }
 
 export const igdbService = new IGDBService();

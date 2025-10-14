@@ -3,6 +3,7 @@ import GameCard from '@/components/GameCard';
 import RefreshButton from '@/components/RefreshButton';
 import HomeHero from '@/components/HomeHero';
 import HomeFeatures from '@/components/HomeFeatures';
+import PopularGames from '@/components/PopularGames';
 
 export default async function HomePage() {
     let games: Game[] = [];
@@ -40,6 +41,10 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <HomeHero />
 
+            {/* Section des jeux les plus populaires */}
+            <PopularGames />
+
+            {/* Section des sorties récentes */}
             {games.length > 0 ? (
                 <>
                     <RefreshButton count={games.length} />
