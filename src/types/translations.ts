@@ -5,7 +5,8 @@ export interface Translations {
         search: {
             placeholder: string;
         };
-        random: string;
+        home: string;
+        explore: string;
     };
 
     // Home page  

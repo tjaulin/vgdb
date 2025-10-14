@@ -6,7 +6,8 @@ export const fr: Translations = {
         search: {
             placeholder: "Rechercher un jeu..."
         },
-        random: "Accueil"
+        home: "Accueil",
+        explore: "Explorer",
     },
 
     home: {
