@@ -96,7 +96,7 @@ export default function PopularGames() {
                     </h2>
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-400 bg-orange-50 dark:bg-orange-900/20 px-3 py-1.5 rounded-full border border-orange-200 dark:border-orange-800">
-                    Basé sur l'activité Steam (24h)
+                    Basé sur l&apos;activité Steam (24h)
                 </div>
             </div>
 
