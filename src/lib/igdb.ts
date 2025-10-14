@@ -1,4 +1,4 @@
-import { GENRE_MAP, PLATFORM_MAP } from '@/data/igdb-data';
+import { GENRE_MAP, PLATFORM_MAP, THEME_MAP } from '@/data/igdb-data';
 
 // Configuration pour l'API IGDB
 export const IGDB_CONFIG = {
@@ -123,6 +123,7 @@ class IGDBService {
     async getGamesWithFilters(filters: {
         genres?: string[];
         platforms?: string[];
+        themes?: string[];
         yearRange?: [number, number];
         ratingRange?: [number, number];
         limit?: number;
@@ -131,6 +132,7 @@ class IGDBService {
         const {
             genres = [],
             platforms = [],
+            themes = [],
             yearRange,
             ratingRange,
             limit = 20,
@@ -145,11 +147,21 @@ class IGDBService {
             if (genreIds.length > 0) {
                 whereConditions.push(`genres = [${genreIds.join(',')}]`);
             }
-        }        // Filtres par plateforme (utilisation d'IDs pour plus de précision)
+        }
+
+        // Filtres par plateforme (utilisation d'IDs pour plus de précision)
         if (platforms.length > 0) {
             const platformIds = platforms.map(platform => PLATFORM_MAP[platform]).filter(id => id !== undefined);
             if (platformIds.length > 0) {
                 whereConditions.push(`platforms = [${platformIds.join(',')}]`);
+            }
+        }
+
+        // Filtres par thème (utilisation d'IDs pour plus de précision)
+        if (themes.length > 0) {
+            const themeIds = themes.map(theme => THEME_MAP[theme]).filter(id => id !== undefined);
+            if (themeIds.length > 0) {
+                whereConditions.push(`themes = [${themeIds.join(',')}]`);
             }
         }
 

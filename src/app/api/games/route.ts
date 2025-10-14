@@ -12,6 +12,7 @@ export async function GET(request: NextRequest) {
         // Récupérer les filtres depuis les paramètres d'URL
         const genres = searchParams.get('genres')?.split(',').filter(Boolean) || [];
         const platforms = searchParams.get('platforms')?.split(',').filter(Boolean) || [];
+        const themes = searchParams.get('themes')?.split(',').filter(Boolean) || [];
 
         const yearRangeParam = searchParams.get('yearRange');
         const yearRange = yearRangeParam ?
@@ -24,13 +25,14 @@ export async function GET(request: NextRequest) {
         let games;
 
         // Si aucun filtre n'est appliqué, utiliser getRecentGames avec offset pour pagination
-        if (genres.length === 0 && platforms.length === 0 && !yearRange && !ratingRange) {
+        if (genres.length === 0 && platforms.length === 0 && themes.length === 0 && !yearRange && !ratingRange) {
             games = await igdbService.getRecentGames(limit, offset);
         } else {
             // Utiliser la nouvelle méthode avec filtres
             games = await igdbService.getGamesWithFilters({
                 genres,
                 platforms,
+                themes,
                 yearRange,
                 ratingRange,
                 limit,

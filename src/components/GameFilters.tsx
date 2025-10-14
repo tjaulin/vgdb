@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { IGDB_GENRES, IGDB_PLATFORMS } from '@/data/igdb-data';
+import { IGDB_GENRES, IGDB_PLATFORMS, IGDB_THEMES } from '@/data/igdb-data';
 import MultiSelect from './MultiSelect';
 
 interface FilterOptions {
     genres: string[];
     platforms: string[];
+    themes: string[];
     yearRange: [number, number];
     ratingRange: [number, number];
 }
@@ -21,6 +22,7 @@ interface GameFiltersProps {
 // Utilisation des données centralisées IGDB
 const AVAILABLE_GENRES = IGDB_GENRES;
 const AVAILABLE_PLATFORMS = IGDB_PLATFORMS;
+const AVAILABLE_THEMES = IGDB_THEMES;
 
 export default function GameFilters({ filters, onFiltersChange, onApplyFilters }: GameFiltersProps) {
     const { t } = useLanguage();
@@ -34,6 +36,10 @@ export default function GameFilters({ filters, onFiltersChange, onApplyFilters }
 
     const handlePlatformsChange = (platforms: string[]) => {
         setLocalFilters(prev => ({ ...prev, platforms }));
+    };
+
+    const handleThemesChange = (themes: string[]) => {
+        setLocalFilters(prev => ({ ...prev, themes }));
     };
 
     const handleYearRangeChange = (index: number, value: number) => {
@@ -57,6 +63,7 @@ export default function GameFilters({ filters, onFiltersChange, onApplyFilters }
         const resetFilters: FilterOptions = {
             genres: [],
             platforms: [],
+            themes: [],
             yearRange: [1980, currentYear],
             ratingRange: [0, 100]
         };
@@ -99,6 +106,20 @@ export default function GameFilters({ filters, onFiltersChange, onApplyFilters }
                     onSelectionChange={handlePlatformsChange}
                     placeholder="Sélectionner des plateformes..."
                     searchPlaceholder="Rechercher une plateforme..."
+                />
+            </div>
+
+            {/* Themes */}
+            <div className="mb-6">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
+                    Thèmes
+                </h3>
+                <MultiSelect
+                    options={AVAILABLE_THEMES}
+                    selectedValues={localFilters.themes}
+                    onSelectionChange={handleThemesChange}
+                    placeholder="Sélectionner des thèmes..."
+                    searchPlaceholder="Rechercher un thème..."
                 />
             </div>
 

@@ -9,6 +9,7 @@ import GameFilters from './GameFilters';
 interface FilterOptions {
     genres: string[];
     platforms: string[];
+    themes: string[];
     yearRange: [number, number];
     ratingRange: [number, number];
 }
@@ -23,6 +24,7 @@ export default function ExplorePage() {
     const [filters, setFilters] = useState<FilterOptions>({
         genres: [],
         platforms: [],
+        themes: [],
         yearRange: [1980, new Date().getFullYear()],
         ratingRange: [0, 100]
     });
@@ -66,6 +68,10 @@ export default function ExplorePage() {
 
             if (currentFilters.platforms.length > 0) {
                 params.append('platforms', currentFilters.platforms.join(','));
+            }
+
+            if (currentFilters.themes.length > 0) {
+                params.append('themes', currentFilters.themes.join(','));
             }
 
             if (currentFilters.yearRange[0] > 1980 || currentFilters.yearRange[1] < new Date().getFullYear()) {

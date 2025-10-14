@@ -269,6 +269,31 @@ export const IGDB_PLATFORMS: IGDBItem[] = [
     { id: 26, name: 'ZX Spectrum' },
 ];
 
+export const IGDB_THEMES: IGDBItem[] = [
+    { id: 41, name: '4X (explore, expand, exploit, and exterminate)' },
+    { id: 1, name: 'Action' },
+    { id: 28, name: 'Business' },
+    { id: 27, name: 'Comedy' },
+    { id: 31, name: 'Drama' },
+    { id: 34, name: 'Educational' },
+    { id: 42, name: 'Erotic' },
+    { id: 17, name: 'Fantasy' },
+    { id: 22, name: 'Historical' },
+    { id: 19, name: 'Horror' },
+    { id: 35, name: 'Kids' },
+    { id: 43, name: 'Mystery' },
+    { id: 32, name: 'Non-fiction' },
+    { id: 38, name: 'Open world' },
+    { id: 40, name: 'Party' },
+    { id: 44, name: 'Romance' },
+    { id: 33, name: 'Sandbox' },
+    { id: 18, name: 'Science fiction' },
+    { id: 23, name: 'Stealth' },
+    { id: 21, name: 'Survival' },
+    { id: 20, name: 'Thriller' },
+    { id: 39, name: 'Warfare' }
+];
+
 // Utilitaires pour créer les maps rapidement
 export const GENRE_MAP = IGDB_GENRES.reduce((acc, genre) => {
     acc[genre.name] = genre.id;
@@ -277,6 +302,11 @@ export const GENRE_MAP = IGDB_GENRES.reduce((acc, genre) => {
 
 export const PLATFORM_MAP = IGDB_PLATFORMS.reduce((acc, platform) => {
     acc[platform.name] = platform.id;
+    return acc;
+}, {} as Record<string, number>);
+
+export const THEME_MAP = IGDB_THEMES.reduce((acc, theme) => {
+    acc[theme.name] = theme.id;
     return acc;
 }, {} as Record<string, number>);
 
