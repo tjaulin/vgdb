@@ -24,6 +24,10 @@ export interface Game {
         id: number;
         name: string;
     }>;
+    themes?: Array<{
+        id: number;
+        name: string;
+    }>;
     involved_companies?: Array<{
         id: number;
         company: {
@@ -106,14 +110,12 @@ class IGDBService {
         const todayTimestamp = Math.floor(Date.now() / 1000);
         const query = `
           fields name, cover.url, first_release_date, rating, rating_count, total_rating, total_rating_count,
-             genres.name, platforms.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher;
-          where first_release_date <= ${todayTimestamp};
-          limit ${limit};
-          offset ${offset};
-          sort first_release_date desc;
-        `;
-
-        const games = await this.makeRequest('games', query);
+             genres.name, themes.name, platforms.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher;
+             where first_release_date <= ${todayTimestamp};
+             limit ${limit};
+             offset ${offset};
+             sort first_release_date desc;
+             `; const games = await this.makeRequest('games', query);
 
         return games;
     }
@@ -165,7 +167,7 @@ class IGDBService {
 
         const query = `
       fields name, cover.url, first_release_date, rating, rating_count, total_rating, total_rating_count,
-             genres.name, platforms.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher;
+             genres.name, themes.name, platforms.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher;
       where ${whereConditions.join(' & ')};
       limit ${limit};
       offset ${offset};
@@ -178,11 +180,11 @@ class IGDBService {
 
     async getGameById(id: number): Promise<Game> {
         const query = `
-      fields name, summary, cover.url, first_release_date, platforms.name, genres.name, 
+      fields name, summary, cover.url, first_release_date, platforms.name, genres.name, themes.name,
              rating, rating_count, total_rating, total_rating_count, screenshots.url, involved_companies.company.name, 
              involved_companies.developer, involved_companies.publisher,
              language_supports.language.name, language_supports.language.native_name, language_supports.language.locale,
-             language_supports.language_support_type.name, age_ratings;
+             language_supports.language_support_type.name;
       where id = ${id};
     `;
 
@@ -193,8 +195,7 @@ class IGDBService {
     async searchGames(query: string, limit: number = 20, offset: number = 0): Promise<Game[]> {
         const searchQuery = `
       fields name, cover.url, first_release_date, rating, rating_count, total_rating, total_rating_count, 
-             genres.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher,
-             age_ratings.rating, age_ratings.category;
+             genres.name, themes.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher;
       search "${query}";
       limit ${limit};
       offset ${offset};
@@ -207,7 +208,7 @@ class IGDBService {
     async getSimilarGames(gameId: number, limit: number = 5): Promise<Game[]> {
         const query = `
       fields name, cover.url, first_release_date, rating, rating_count, total_rating, total_rating_count,
-             genres.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher;
+             genres.name, themes.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher;
       where similar_games = [${gameId}];
       limit ${limit};
     `;

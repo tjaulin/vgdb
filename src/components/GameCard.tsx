@@ -89,6 +89,25 @@ export default function GameCard({ game }: GameCardProps) {
                                 )}
                             </div>
                         )}
+
+                        {/* Themes */}
+                        {game.themes && game.themes.length > 0 && (
+                            <div className="flex flex-wrap gap-1">
+                                {game.themes.slice(0, 2).map((theme) => (
+                                    <span
+                                        key={theme.id}
+                                        className="inline-block bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 text-xs px-2 py-1 rounded"
+                                    >
+                                        {theme.name}
+                                    </span>
+                                ))}
+                                {game.themes.length > 2 && (
+                                    <span className="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs px-2 py-1 rounded">
+                                        +{game.themes.length - 2}
+                                    </span>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
 

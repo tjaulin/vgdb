@@ -59,6 +59,7 @@ export interface Translations {
         releaseDate: string;
         platforms: string;
         genres: string;
+        themes: string;
         developers: string;
         publishers: string;
         description: string;

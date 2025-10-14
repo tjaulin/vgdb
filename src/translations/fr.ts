@@ -57,6 +57,7 @@ export const fr: Translations = {
         releaseDate: "Date de sortie",
         platforms: "Plateformes",
         genres: "Genres",
+        themes: "Thèmes",
         developers: "Développeurs",
         publishers: "Éditeurs",
         description: "Description",

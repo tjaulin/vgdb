@@ -110,6 +110,22 @@ export default function GameDetails({ game, similarGames }: GameDetailsProps) {
                             </div>
                         )}
 
+                        {game.themes && game.themes.length > 0 && (
+                            <div>
+                                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{t.game.themes}</h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {game.themes.map((theme) => (
+                                        <span
+                                            key={theme.id}
+                                            className="inline-block bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 text-sm px-3 py-1 rounded-full"
+                                        >
+                                            {theme.name}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
                         {developers && developers.length > 0 && (
                             <div>
                                 <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{t.game.developers}</h3>
