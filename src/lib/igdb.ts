@@ -189,13 +189,14 @@ class IGDBService {
         return games[0];
     }
 
-    async searchGames(query: string, limit: number = 20): Promise<Game[]> {
+    async searchGames(query: string, limit: number = 20, offset: number = 0): Promise<Game[]> {
         const searchQuery = `
       fields name, cover.url, first_release_date, rating, rating_count, total_rating, total_rating_count, 
-             genres.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher;
+             genres.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher,
+             age_ratings.rating, age_ratings.category;
       search "${query}";
-      where rating != null & cover != null;
       limit ${limit};
+      offset ${offset};
     `;
 
         const games = await this.makeRequest('games', searchQuery);

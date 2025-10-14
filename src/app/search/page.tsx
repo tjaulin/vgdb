@@ -1,6 +1,5 @@
-import { igdbService, Game } from '@/lib/igdb';
-import SearchResults from '@/components/SearchResults';
-import SearchEmpty from '@/components/SearchEmpty';
+import { Suspense } from 'react';
+import SearchPageClient from '@/components/SearchPageClient';
 import type { Metadata } from 'next';
 
 interface Props {
@@ -16,28 +15,24 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     };
 }
 
-export default async function SearchPage({ searchParams }: Props) {
-    const query = searchParams.q;
-    let games: Game[] = [];
-    let error: string | null = null;
-
-    if (!query) {
-        return (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <SearchEmpty />
-            </div>
-        );
-    }
-
-    try {
-        games = await igdbService.searchGames(query, 20);
-    } catch (err) {
-        error = err instanceof Error ? err.message : 'Une erreur est survenue lors de la recherche';
-    }
-
+export default function SearchPage() {
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <SearchResults games={games} query={query} error={error} />
-        </div>
+        <Suspense fallback={
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div className="flex items-center justify-center py-12">
+                    <div className="flex items-center space-x-3">
+                        <svg className="animate-spin w-8 h-8 text-primary-500" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span className="text-lg font-medium text-gray-700 dark:text-gray-300">
+                            Chargement...
+                        </span>
+                    </div>
+                </div>
+            </div>
+        }>
+            <SearchPageClient />
+        </Suspense>
     );
 }
