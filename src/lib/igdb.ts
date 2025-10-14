@@ -98,22 +98,23 @@ class IGDBService {
             throw new Error(`IGDB API error: ${response.status} ${response.statusText}`);
         }
         const data = await response.json();
-        console.log(data);
 
         return data;
     }
 
     async getRecentGames(limit: number = 50, offset: number = 0): Promise<Game[]> {
+        const todayTimestamp = Math.floor(Date.now() / 1000);
         const query = `
-      fields name, cover.url, first_release_date, rating, rating_count, total_rating, total_rating_count,
+          fields name, cover.url, first_release_date, rating, rating_count, total_rating, total_rating_count,
              genres.name, platforms.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher;
-      where rating != null & cover != null & first_release_date != null;
-      limit ${limit};
-      offset ${offset};
-      sort first_release_date desc;
-    `;
+          where first_release_date <= ${todayTimestamp};
+          limit ${limit};
+          offset ${offset};
+          sort first_release_date desc;
+        `;
 
         const games = await this.makeRequest('games', query);
+
         return games;
     }
 
@@ -134,7 +135,7 @@ class IGDBService {
             offset = 0
         } = filters;
 
-        let whereConditions = ['rating != null', 'cover != null', 'first_release_date != null'];
+        let whereConditions = [];
 
         // Filtres par genre (utilisation d'IDs pour plus de précision)
         if (genres.length > 0) {
@@ -181,7 +182,7 @@ class IGDBService {
              rating, rating_count, total_rating, total_rating_count, screenshots.url, involved_companies.company.name, 
              involved_companies.developer, involved_companies.publisher,
              language_supports.language.name, language_supports.language.native_name, language_supports.language.locale,
-             language_supports.language_support_type.name;
+             language_supports.language_support_type.name, age_ratings;
       where id = ${id};
     `;
 
@@ -207,7 +208,7 @@ class IGDBService {
         const query = `
       fields name, cover.url, first_release_date, rating, rating_count, total_rating, total_rating_count,
              genres.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher;
-      where similar_games = [${gameId}] & rating != null & cover != null;
+      where similar_games = [${gameId}];
       limit ${limit};
     `;
 
