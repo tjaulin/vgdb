@@ -10,9 +10,12 @@ export async function GET(request: NextRequest) {
         const offset = parseInt(searchParams.get('offset') || '0');
 
         // Récupérer les filtres depuis les paramètres d'URL
+        const search = searchParams.get('search') || undefined;
         const genres = searchParams.get('genres')?.split(',').filter(Boolean) || [];
         const platforms = searchParams.get('platforms')?.split(',').filter(Boolean) || [];
         const themes = searchParams.get('themes')?.split(',').filter(Boolean) || [];
+
+        console.log('🔍 API Route - Search param:', search); // Debug log
 
         const yearRangeParam = searchParams.get('yearRange');
         const yearRange = yearRangeParam ?
@@ -24,12 +27,10 @@ export async function GET(request: NextRequest) {
 
         let games;
 
-        // Si aucun filtre n'est appliqué, utiliser getRecentGames avec offset pour pagination
-        if (genres.length === 0 && platforms.length === 0 && themes.length === 0 && !yearRange && !ratingRange) {
-            games = await igdbService.getRecentGames(limit, offset);
-        } else {
-            // Utiliser la nouvelle méthode avec filtres
+        // Si des filtres sont appliqués (incluant la recherche), utiliser getGamesWithFilters
+        if (search || genres.length > 0 || platforms.length > 0 || themes.length > 0 || yearRange || ratingRange) {
             games = await igdbService.getGamesWithFilters({
+                search,
                 genres,
                 platforms,
                 themes,
@@ -38,6 +39,10 @@ export async function GET(request: NextRequest) {
                 limit,
                 offset
             });
+        }
+        // Si aucun filtre n'est appliqué, utiliser getRecentGames
+        else {
+            games = await igdbService.getRecentGames(limit, offset);
         }
 
         return NextResponse.json({ games, hasMore: games.length === limit });

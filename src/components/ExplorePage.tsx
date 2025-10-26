@@ -7,6 +7,7 @@ import GameCard from './GameCard';
 import GameFilters from './GameFilters';
 
 interface FilterOptions {
+    search: string;
     genres: string[];
     platforms: string[];
     themes: string[];
@@ -22,6 +23,7 @@ export default function ExplorePage() {
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const [filters, setFilters] = useState<FilterOptions>({
+        search: '',
         genres: [],
         platforms: [],
         themes: [],
@@ -61,6 +63,11 @@ export default function ExplorePage() {
                 limit: limit.toString(),
                 offset: offset.toString()
             });
+
+            if (currentFilters.search && currentFilters.search.trim()) {
+                console.log('🔍 Client - Adding search param:', currentFilters.search.trim()); // Debug
+                params.append('search', currentFilters.search.trim());
+            }
 
             if (currentFilters.genres.length > 0) {
                 params.append('genres', currentFilters.genres.join(','));

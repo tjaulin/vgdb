@@ -121,6 +121,7 @@ class IGDBService {
     }
 
     async getGamesWithFilters(filters: {
+        search?: string;
         genres?: string[];
         platforms?: string[];
         themes?: string[];
@@ -130,6 +131,7 @@ class IGDBService {
         offset?: number;
     }): Promise<Game[]> {
         const {
+            search,
             genres = [],
             platforms = [],
             themes = [],
@@ -177,14 +179,39 @@ class IGDBService {
             whereConditions.push(`total_rating >= ${ratingRange[0]} & total_rating <= ${ratingRange[1]}`);
         }
 
-        const query = `
+        // Construction de la requête
+        let query = `
       fields name, cover.url, first_release_date, rating, rating_count, total_rating, total_rating_count,
-             genres.name, themes.name, platforms.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher;
-      where ${whereConditions.join(' & ')};
-      limit ${limit};
-      offset ${offset};
-      sort first_release_date desc;
-    `;
+             genres.name, themes.name, platforms.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher;`;
+
+        // IGDB ne permet pas d'utiliser 'search' et 'where' ensemble
+        // Si on a une recherche ET d'autres filtres, on convertit la recherche en condition where
+        if (search && search.trim() && whereConditions.length > 0) {
+            // Ajouter la recherche comme condition where (case-insensitive)
+            whereConditions.push(`name ~ *"${search.trim()}"*`);
+        }
+
+        // Si on a SEULEMENT une recherche (pas d'autres filtres), on utilise 'search' pour de meilleurs résultats
+        // MAIS on doit utiliser where pour pouvoir trier par date
+        if (search && search.trim() && whereConditions.length === 0) {
+            // On convertit quand même en where pour pouvoir trier
+            whereConditions.push(`name ~ *"${search.trim()}"*`);
+        }
+
+        // Ajouter les conditions where si elles existent
+        if (whereConditions.length > 0) {
+            query += `\n      where ${whereConditions.join(' & ')};`;
+        }
+
+        query += `\n      limit ${limit};
+      offset ${offset};`;
+
+        // Toujours trier par date de sortie du plus récent au plus vieux
+        query += `\n      sort first_release_date desc;`;
+
+        query += `\n    `;
+
+        console.log('🔍 IGDB Query:', query); // Debug log
 
         const games = await this.makeRequest('games', query);
         return games;
